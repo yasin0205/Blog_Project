@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from App_Login.forms import SignUpForm
+
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 
@@ -8,10 +10,10 @@ from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 
 def sign_up(request):
-    form = UserCreationForm()
+    form = SignUpForm()
     registered = False
     if request.method == 'POST':
-        form = UserCreationForm(data=request.POST)
+        form = SignUpForm(data=request.POST)
         if form.is_valid():
             form.save()
             registered = True
