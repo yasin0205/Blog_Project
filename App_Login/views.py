@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordChangeForm
-from App_Login.forms import SignUpForm, UserProfileChange
+from App_Login.forms import SignUpForm, UserProfileChange, ProfilePic
 
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
@@ -37,9 +37,11 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
 @login_required
 def profile(request):
     return render(request, 'App_Login/profile.html', context={})
+
 @login_required
 def user_change(request):
     current_user = request.user
@@ -50,6 +52,7 @@ def user_change(request):
             form.save()
             form = UserProfileChange(instance=current_user)
     return render(request, 'App_Login/change_profile.html', context={'form': form})
+
 @login_required
 def pass_change(request):
     current_user = request.user
@@ -61,3 +64,15 @@ def pass_change(request):
             form.save()
             changed=True
     return render(request, 'App_Login/pass_change.html', context={'form':form, 'changed':changed})
+
+@login_required
+def add_pro_pic(request):
+    form = ProfilePic()
+    if request.method == 'POST':
+        form = ProfilePic(request.POST, request.FILES)
+        if form.is_valid():
+            user_obj = form.save(commit=False)
+            user_obj.user = request.user
+            user_obj.save()
+            return HttpResponseRedirect(reverse('App_Login:profile'))
+    return render(request, 'App_Login/pro_pic_add.html', context={'form': form})
