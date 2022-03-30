@@ -76,3 +76,13 @@ def add_pro_pic(request):
             user_obj.save()
             return HttpResponseRedirect(reverse('App_Login:profile'))
     return render(request, 'App_Login/pro_pic_add.html', context={'form': form})
+
+@login_required
+def change_pro_pic(request):
+    form = ProfilePic(instance=request.user.user_profile)
+    if request.method == 'POST':
+        form = ProfilePic(request.POST,request.FILES, instance=user.user_profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('App_Login:profile'))
+    return render(request, 'App_Login/pro_pic_add.html', context={'form': form})

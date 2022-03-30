@@ -1,0 +1,5 @@
+
+pip install django==3.0
+pip install pillow
+pip install django-crispy-forms
+pip install django-cleanup
