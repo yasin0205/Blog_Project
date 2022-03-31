@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from django.contrib.auth.models import User
+
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordChangeForm
 from App_Login.forms import SignUpForm, UserProfileChange, ProfilePic
 
@@ -81,7 +83,7 @@ def add_pro_pic(request):
 def change_pro_pic(request):
     form = ProfilePic(instance=request.user.user_profile)
     if request.method == 'POST':
-        form = ProfilePic(request.POST,request.FILES, instance=user.user_profile)
+        form = ProfilePic(request.POST,request.FILES, instance=request.user.user_profile)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('App_Login:profile'))
