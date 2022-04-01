@@ -2,14 +2,15 @@ from django.shortcuts import render
 
 from django.contrib.auth.models import User
 
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from App_Login.forms import SignUpForm, UserProfileChange, ProfilePic
 
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
+
 
 def sign_up(request):
     form = SignUpForm()
@@ -19,8 +20,9 @@ def sign_up(request):
         if form.is_valid():
             form.save()
             registered = True
-    dict = {'form':form, 'registered':registered}
+    dict = {'form': form, 'registered': registered}
     return render(request, 'App_Login/signup.html', context=dict)
+
 
 def login_page(request):
     form = AuthenticationForm()
@@ -30,19 +32,22 @@ def login_page(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None: #if user exists
-                login(request,user)
+            if user is not None:  # if user exists
+                login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-    return render(request, 'App_Login/login.html', context={'form':form})
+    return render(request, 'App_Login/login.html', context={'form': form})
+
 
 @login_required
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+
 @login_required
 def profile(request):
     return render(request, 'App_Login/profile.html', context={})
+
 
 @login_required
 def user_change(request):
@@ -55,17 +60,19 @@ def user_change(request):
             form = UserProfileChange(instance=current_user)
     return render(request, 'App_Login/change_profile.html', context={'form': form})
 
+
 @login_required
 def pass_change(request):
     current_user = request.user
     changed = False
     form = PasswordChangeForm(current_user)
-    if request.method=='POST':
+    if request.method == 'POST':
         form = PasswordChangeForm(current_user, data=request.POST)
         if form.is_valid():
             form.save()
-            changed=True
-    return render(request, 'App_Login/pass_change.html', context={'form':form, 'changed':changed})
+            changed = True
+    return render(request, 'App_Login/pass_change.html', context={'form': form, 'changed': changed})
+
 
 @login_required
 def add_pro_pic(request):
@@ -79,11 +86,12 @@ def add_pro_pic(request):
             return HttpResponseRedirect(reverse('App_Login:profile'))
     return render(request, 'App_Login/pro_pic_add.html', context={'form': form})
 
+
 @login_required
 def change_pro_pic(request):
     form = ProfilePic(instance=request.user.user_profile)
     if request.method == 'POST':
-        form = ProfilePic(request.POST,request.FILES, instance=request.user.user_profile)
+        form = ProfilePic(request.POST, request.FILES, instance=request.user.user_profile)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('App_Login:profile'))

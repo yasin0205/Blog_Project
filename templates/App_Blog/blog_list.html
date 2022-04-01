@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-sm-8">
-        <p>{{blog.blog_content|range_filter|linebreaks}}</p>
+        <p>{{blog.blog_content|range_filter|linebreaks}} <a href="{% url 'App_Blog:blog_details' blog_id=blog.id %}">See more</a></p>
         <h6>Posted by: <a href="">{{blog.author}}</a></h6>
     </div>
 </div>
