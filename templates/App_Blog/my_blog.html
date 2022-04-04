@@ -15,7 +15,7 @@
             <a href="{% url 'App_Blog:blog_details' blog_id=blog.id %}">See more</a>
         </div>
     </div>
-    <a href="{% url 'App_Blog:edit_blog' pk=blog.pk %}">Edit</a>
+    <a href="{% url 'App_Blog:edit_blog' pk=blog.id %}">Edit</a>
     <hr>
 {% endfor %}
 

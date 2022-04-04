@@ -64,7 +64,8 @@ def liked(request, blog_id):
     if not already_liked:
         liked_post = Likes(blog=blog, user=user)
         liked_post.save()
-    return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'pk': blog_id}))
+    #return render(request, 'App_Blog/blog_details.html',context={'blog_id':blog_id})
+    return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'blog_id': blog.id}))
 
 
 @login_required
@@ -73,7 +74,7 @@ def unliked(request, blog_id):
     user = request.user
     already_liked = Likes.objects.filter(blog=blog, user=user)
     already_liked.delete()
-    return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'pk': blog_id}))
+    return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'blog_id': blog.id}))
 
 
 class UpdateBlog(LoginRequiredMixin, UpdateView):
